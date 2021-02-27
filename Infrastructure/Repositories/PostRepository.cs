@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,39 +18,41 @@ namespace Infrastructure.Repositories
         {
             _context = context;
         }
-        public Post Add(Post post)
+        public async Task<Post> AddAsync(Post post)
         {
-            _context.Posts.Add(post);
-            _context.SaveChanges();
-            return post;
+            var createdPost = await _context.Posts.AddAsync(post);
+            await _context.SaveChangesAsync();
+            return createdPost.Entity;
         }
 
-        public void Delete(Post post)
+        public async Task DeleteAsync(Post post)
         {
             _context.Posts.Remove(post);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
-        public IEnumerable<Post> GetAll()
+        public async Task<IEnumerable<Post>> GetAllAsync()
         {
-            return _context.Posts;
+            return await _context.Posts.ToListAsync();
         }
          
-        public Post GetByID(int id)
+        public async Task<Post> GetByIDAsync(int id)
         {
-            return _context.Posts.SingleOrDefault(x => x.ID == id);
+            return await _context.Posts.SingleOrDefaultAsync(x => x.ID == id);
         }
 
-        public IEnumerable<Post> GetByPhrase(string phrase)
+        public async Task<IEnumerable<Post>> GetByPhraseAsync(string phrase)
         {
-            var posts = _context.Posts.Where(x => x.Title.ToLower().Contains(phrase.Trim().ToLower()));
-            return posts;
+            var posts =  _context.Posts.Where(x => x.Title.ToLower().Contains(phrase.Trim().ToLower())).ToListAsync();
+            return await posts;
         }
 
-        public void Update(Post post)
+        public async Task UpdateAsync(Post post)
         {
             _context.Posts.Update(post);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+            await Task.CompletedTask;
         }
     }
 }

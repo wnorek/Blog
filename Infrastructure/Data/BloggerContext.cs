@@ -17,7 +17,7 @@ namespace Infrastructure.Data
 
         public DbSet<Post> Posts { get; set; }
 
-        public override int SaveChanges()
+        public async Task<int> SaveChangesAsync()
         {
             var entries = ChangeTracker
                 .Entries()
@@ -32,7 +32,7 @@ namespace Infrastructure.Data
                     ((AuditableEntity)entityEntry.Entity).Created = DateTime.UtcNow;
                 }
             }
-            return base.SaveChanges();
+            return await base.SaveChangesAsync();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace WebAPI.Controllers.V2
     [ApiController]
     public class PostController : Controller
     {
-        private readonly IPostService _postService;
+       /* private readonly IPostService _postService;
         public PostController(IPostService postService)
         {
             _postService = postService;
@@ -70,6 +70,6 @@ namespace WebAPI.Controllers.V2
         {
             _postService.DeletePost(id);
             return NoContent();
-        }
+        }*/
     }
 }
