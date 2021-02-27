@@ -22,7 +22,7 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public PostDto AddNewPost(CreatePostDto newPost)
+        public async Task<PostDto> AddNewPostAsync(CreatePostDto newPost)
         {
             if(string.IsNullOrEmpty(newPost.Title))
             {
@@ -30,50 +30,49 @@ namespace Application.Services
             }
 
             var post = _mapper.Map<Post>(newPost);
-            _postRepository.Add(post);
-            return _mapper.Map<PostDto>(post);
+            var result = await _postRepository.AddAsync(post);
+            return _mapper.Map<PostDto>(result);
         }
 
-        public void DeletePost(int id)
+        public async Task DeletePostAsync(int id)
         {
-            var post = _postRepository.GetByID(id);
-            _postRepository.Delete(post);
+            var post = await _postRepository.GetByIDAsync(id);
+            await _postRepository.DeleteAsync(post);
         }
 
-        public IEnumerable<PostDto> GetAllPosts()
+        public async Task<IEnumerable<PostDto>> GetAllPostsAsync()
         {
-            var posts = _postRepository.GetAll();
-
+            var posts = await _postRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
-        public PostDto GetPostById(int id)
+        public async Task<PostDto> GetPostByIdAsync(int id)
         {
-            var post = _postRepository.GetByID(id);
-            return _mapper.Map<PostDto>(post);
+            var post = await _postRepository.GetByIDAsync(id);
+            return  _mapper.Map<PostDto>(post);
         }
 
-        public IEnumerable<PostDto> GetPostsByPhrase(string phrase)
+        public async Task<IEnumerable<PostDto>> GetPostsByPhraseAsync(string phrase)
         {
             IEnumerable<Post> posts;
 
             if (string.IsNullOrEmpty(phrase) || string.IsNullOrWhiteSpace(phrase))
             {
-                posts = _postRepository.GetAll();
+                posts = await _postRepository.GetAllAsync();
             }
             else
             {
-                posts = _postRepository.GetByPhrase(phrase);
+                posts = await _postRepository.GetByPhraseAsync(phrase);
             }
 
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
-        public void UpdatePost(UpdatePostDto updatePost)
+        public async Task UpdatePostAsync(UpdatePostDto updatePost)
         {
-            var existingPost = _postRepository.GetByID(updatePost.Id);
+            var existingPost = await _postRepository.GetByIDAsync(updatePost.Id);
             var post = _mapper.Map(updatePost, existingPost);
-            _postRepository.Update(post);
+            await _postRepository.UpdateAsync(post);
         }
 
     }
