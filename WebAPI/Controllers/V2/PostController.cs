@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.DTO.Cosmos;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,36 +10,30 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers.V2
 {
-    [ApiExplorerSettings(IgnoreApi =true)]
     [ApiVersion("2.0")]
     [Route("api/[controller]")]
     [ApiController]
     public class PostController : Controller
     {
-       /* private readonly IPostService _postService;
-        public PostController(IPostService postService)
+        private readonly ICosmosPostService _postService;
+        public PostController(ICosmosPostService postService)
         {
             _postService = postService;
         }
 
         [SwaggerOperation(Summary ="Retrieves all posts")]
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var posts = _postService.GetAllPosts();
-            return Ok(
-                new
-                {
-                    Posts=posts, 
-                    Count=posts.Count()
-                });
+            var posts = await _postService.GetAllPostsAsync();
+            return Ok(posts);
         }
 
         [SwaggerOperation(Summary = "Retrieves post")]
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(string id)
         {
-            var post = _postService.GetPostById(id);
+            var post = await _postService.GetPostByIdAsync(id);
             
             if(post==null)
             {
@@ -50,26 +45,26 @@ namespace WebAPI.Controllers.V2
 
         [SwaggerOperation(Summary = "Create new post")]
         [HttpPost]
-        public IActionResult Create(CreatePostDto newPost)
+        public async Task<IActionResult> CreateAsync(CreateCosmosPostDto newPost)
         {
-            var post = _postService.AddNewPost(newPost);
+            var post = await _postService.AddNewPostAsync(newPost);
             return Created($"api/posts/{post.Id}", post);
         }
 
         [SwaggerOperation(Summary = "Update post")]
         [HttpPut]
-        public IActionResult Update(UpdatePostDto updatePost)
+        public async Task<IActionResult> UpdateAsync(UpdateCosmosPostDto updatePost)
         {
-            _postService.UpdatePost(updatePost);
+            await _postService.UpdatePostAsync(updatePost);
             return NoContent();
         }
 
         [SwaggerOperation(Summary = "Delete post")]
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
-            _postService.DeletePost(id);
+            await _postService.DeletePostAsync(id);
             return NoContent();
-        }*/
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Domain.Interfaces;
+﻿using Application.Interfaces;
+using Application.Services;
+using Domain.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -14,6 +16,8 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<ICosmosRepository, CosmosPostRepository>();
+            services.AddScoped<ICosmosPostService, CosmosPostService>();
 
             return services;
         }
