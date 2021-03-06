@@ -17,6 +17,8 @@ namespace Infrastructure.Data
 
         public DbSet<Post> Posts { get; set; }
 
+        public DbSet<Author> Authors { get; set; }
+
         public async Task<int> SaveChangesAsync()
         {
             var entries = ChangeTracker

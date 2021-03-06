@@ -5,6 +5,7 @@ using Application.Services;
 using Domain.Interfaces;
 using Infrastructure;
 using Infrastructure.Repositories;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
@@ -23,15 +24,21 @@ namespace WebAPI.Installers
 
             services.AddApplication();
             services.AddInfrastructure();
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options => 
+                {
+                    options.JsonSerializerOptions.WriteIndented = true;
+                });
 
             services.AddApiVersioning(x=>
                 {
-                    x.DefaultApiVersion = new ApiVersion(2, 0);
+                    x.DefaultApiVersion = new ApiVersion(3, 0);
                     x.AssumeDefaultVersionWhenUnspecified = true;
                     x.ReportApiVersions = true;
                     x.ApiVersionReader = new HeaderApiVersionReader("x-ApiVersionReader-version");
                 });
+
+            services.AddOData();
         }
     }
 }
