@@ -16,8 +16,10 @@ namespace Application.Interfaces
         Task<PostDto> GetPostByIdAsync(int id);
         Task<IEnumerable<PostDto>> GetPostsByPhraseAsync(string phrase);
 
-        Task<PostDto> AddNewPostAsync(CreatePostDto newPost);
+        Task<PostDto> AddNewPostAsync(CreatePostDto newPost, string userId);
         Task UpdatePostAsync(UpdatePostDto updatePost);
         Task DeletePostAsync(int id);
+
+        Task<bool> UserOwnsPostAsync(int postId, string userId);
     }
 }

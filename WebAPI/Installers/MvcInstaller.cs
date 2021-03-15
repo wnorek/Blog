@@ -32,13 +32,17 @@ namespace WebAPI.Installers
 
             services.AddApiVersioning(x=>
                 {
-                    x.DefaultApiVersion = new ApiVersion(3, 0);
+                    x.DefaultApiVersion = new ApiVersion(1, 0);
                     x.AssumeDefaultVersionWhenUnspecified = true;
                     x.ReportApiVersions = true;
                     x.ApiVersionReader = new HeaderApiVersionReader("x-ApiVersionReader-version");
                 });
 
+            services.AddAuthorization();
+
+            services.AddTransient<UserResolverService>();
             services.AddOData();
+
         }
     }
 }
